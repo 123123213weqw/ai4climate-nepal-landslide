@@ -1,0 +1,10 @@
+# bulk caches / re-downloadable data (code re-fetches automatically)
+data/tiles/
+data/geo/
+data/glc.csv
+data/climate/wc_prec.zip
+
+__pycache__/
+*.pyc
+.DS_Store
+*.log
