@@ -1,0 +1,1 @@
+Evaluation is where susceptibility studies usually cheat. Neighboring sites share the same slope and the same rain, so random cross validation tests a model on its own backyard. This pipeline scores every model on held out half degree spatial blocks instead. The honest protocol.

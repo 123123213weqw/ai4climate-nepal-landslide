@@ -1,0 +1,1 @@
+Under spatial cross validation, gradient boosting and Hybrid C N N tie at the top, with an A U C around zero point eight nine. The C N N is the most stable across folds, and it is the model that can draw the map.

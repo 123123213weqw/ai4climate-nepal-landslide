@@ -1,0 +1,1 @@
+A new ablation study on a Tesla V one hundred asks: is bigger better? No. Doubling the network's width costs up to zero point zero two A U C. Shrinking its field of view costs zero point zero one. Extending it to two kilometers adds nothing. Context helps. Capacity doesn't. The bottleneck is data, not architecture.

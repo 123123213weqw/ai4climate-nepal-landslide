@@ -1,0 +1,1 @@
+Terrain comes from open Terrarium tiles at thirty four meter resolution. From elevation alone, the pipeline derives slope, aspect, curvature, roughness, local relief, and a wetness proxy. Eight channels that become a thirty three by thirty three picture centered on every site.

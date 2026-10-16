@@ -1,0 +1,1 @@
+Four contenders enter. Classic logistic regression. Gradient boosting. A multilayer perceptron. And Hybrid C N N — a ResNet style encoder that reads the terrain patch like an image, and fuses climate and proximity context in its head.

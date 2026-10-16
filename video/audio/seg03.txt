@@ -1,0 +1,1 @@
+The evidence starts with NASA's Global Landslide Catalog: four hundred and seventy nine events in Nepal after cleaning. Downpours alone trigger two hundred and twenty one of them. To teach a model what safe terrain looks like, an equal number of pseudo absences is sampled at least two kilometers from any known event.
