@@ -75,8 +75,8 @@ def train_mlp_fold(Xtr, ytr, device, epochs, batch_size=1024, patience=25):
     return model, mean, std
 
 
-def load_patch_data():
-    z = np.load(DATA_DIR / "patches.npz", allow_pickle=True)
+def load_patch_data(name: str = "patches.npz"):
+    z = np.load(DATA_DIR / name, allow_pickle=True)
     return (
         z["patches"].astype(np.float32),
         z["scalars"].astype(np.float32),
@@ -162,16 +162,21 @@ def main():
                     help="random = classic (leaky) CV, for the leakage experiment")
     ap.add_argument("--zero-scalars", action="store_true",
                     help="ablation: zero the CNN scalar head inputs (terrain patches only)")
+    ap.add_argument("--width", type=int, default=32, help="HybridCNN base width (ablation)")
+    ap.add_argument("--patches", default="patches.npz", help="patch file in data/ (size ablation)")
     args = ap.parse_args()
 
     device = pick_device(args.device)
     suffix = ("_noscalars" if args.zero_scalars else "") + ("_randomsplit" if args.split == "random" else "")
+    suffix += "" if args.width == 32 else f"_w{args.width}"
+    stem = args.patches.removesuffix(".npz")
+    suffix += "" if stem == "patches" else f"_p{stem.split('_')[-1]}"
     save_final = suffix == ""
     patch_data = None
     names = ["logreg", "gbm", "mlp", "cnn"] if args.model == "all" else [args.model]
     if "cnn" in names:
-        if (DATA_DIR / "patches.npz").exists():
-            patch_data = load_patch_data()
+        if (DATA_DIR / args.patches).exists():
+            patch_data = load_patch_data(args.patches)
             print(f"patches: {patch_data[0].shape} | climate: {patch_data[1].shape}")
         else:
             print("cnn skipped (data/patches.npz missing — run: python -m src.data build-patches)")
@@ -204,7 +209,7 @@ def main():
                 model, mean, std = train_mlp_fold(X[tr_i], y_all[tr_i], device, args.epochs)
                 p = predict_mlp(model, X[te_i], mean, std, device)
             elif name == "cnn":
-                model, cm, cs, sm, ss = train_cnn_fold(P[tr_i], S[tr_i], y_p[tr_i], device, args.epochs)
+                model, cm, cs, sm, ss = train_cnn_fold(P[tr_i], S[tr_i], y_p[tr_i], device, args.epochs, width=args.width)
                 p = predict_cnn(model, P[te_i], S[te_i], cm, cs, sm, ss, device)
             else:
                 model = sklearn_models()["logreg"] if name == "logreg" else make_gbm()
@@ -238,13 +243,13 @@ def main():
             )
         elif name == "cnn":
             P, S, y_p, _ = patch_data
-            model, cm, cs, sm, ss = train_cnn_fold(P, S, y_p, device, args.epochs)
+            model, cm, cs, sm, ss = train_cnn_fold(P, S, y_p, device, args.epochs, width=args.width)
             torch.save(
                 {
                     "state_dict": model.state_dict(),
                     "ch_mean": cm, "ch_std": cs, "sc_mean": sm, "sc_std": ss,
                     "in_ch": int(P.shape[1]), "scalar_dim": int(S.shape[1]),
-                    "patch_size": int(P.shape[-1]), "width": 32,
+                    "patch_size": int(P.shape[-1]), "width": args.width,
                     "params": count_params(model),
                 },
                 RUNS_DIR / "final_cnn.pt",

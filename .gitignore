@@ -8,3 +8,9 @@ __pycache__/
 *.pyc
 .DS_Store
 *.log
+
+# video intermediates (regenerable: render.py + assemble_audio.py + seg*.txt)
+video/audio/*.wav
+video/audio/*.aiff
+video/preview/
+video/assets/
