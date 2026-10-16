@@ -103,7 +103,7 @@ One-command pipeline: `bash scripts/run_all.sh` (or `--smoke` for a quick pass;
 - The 2016 catalog snapshot misses recent monsoon seasons (COOLR live feed or
   ICIMOD inventories would extend it).
 
-## Roadmap (the "improve the conclusions with AI" story)
+## Roadmap
 
 1. **Ablations** — CNN on patches only (no climate) vs + climate; patch size
    17/33/65; width 32/64/128. Quantifies what actually helps.
